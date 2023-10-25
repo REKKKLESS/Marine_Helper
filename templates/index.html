@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fish Species Classification</title>
+    <style>
+        /* Add your CSS styles here */
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+            background-color: white;
+        }
+
+       
+
+        header {
+            background-color:white;
+            color: black;
+            text-align: center;
+            padding: 20px 0;
+            padding-top:50px;
+
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: skyblue;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 28px;
+            text-align: center;
+            color:rgb(5, 5, 175);
+            /* margin-bottom: 20px; */
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        label.upload-label {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button {
+            display: block;
+            margin: 20px auto;
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #predictionResult {
+            text-align: center;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+        #uploadedImage {
+            max-width: 100%;
+            height: auto;
+            display: none;
+            margin-top: 20px;
+        }
+
+        *,
+*::after,
+*::before{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+.html{
+    font-size: 62.5%;
+}
+
+.navbar input[type="checkbox"],
+.navbar .hamburger-lines{
+    display: none;
+}
+
+.container{
+    max-width: 100%;
+    width: 100%;
+    margin: auto;
+}
+
+.navbar{
+    box-shadow: 0px 5px 10px 0px #aaa;
+    /* position: fixed; */
+    width: 100%;
+    background: #fff;
+    color: #000;
+    opacity: 0.85;
+    z-index: 100;
+}
+
+.navbar-container{
+    display: flex;
+    justify-content: space-between;
+    height: 64px;
+    align-items: center;
+}
+
+.menu-items{
+    order: 2;
+    display: flex;
+}
+.logo{
+    order: 1;
+    font-size: 2.3rem;
+}
+
+.menu-items li{
+    list-style: none;
+    margin-left: 1.5rem;
+    font-size: 1.3rem;
+}
+
+.navbar a{
+    color: #444;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease-in-out;
+}
+
+.navbar a:hover{
+    color: #117964;
+}
+
+@media (max-width: 768px){
+    .navbar{
+        opacity: 0.95;
+    }
+
+    .navbar-container input[type="checkbox"],
+    .navbar-container .hamburger-lines{
+        display: block;
+    }
+
+    .navbar-container{
+        display: block;
+        position: relative;
+        height: 64px;
+    }
+
+    .navbar-container input[type="checkbox"]{
+        position: absolute;
+        display: block;
+        height: 32px;
+        width: 30px;
+        top: 20px;
+        left: 20px;
+        z-index: 5;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    .navbar-container .hamburger-lines{
+        display: block;
+        height: 28px;
+        width: 35px;
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .navbar-container .hamburger-lines .line{
+        display: block;
+        height: 4px;
+        width: 100%;
+        border-radius: 10px;
+        background: #333;
+    }
+    
+    .navbar-container .hamburger-lines .line1{
+        transform-origin: 0% 0%;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .navbar-container .hamburger-lines .line2{
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .navbar-container .hamburger-lines .line3{
+        transform-origin: 0% 100%;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .navbar .menu-items{
+        padding-top: 100px;
+        background: #fff;
+        height: 100vh;
+        max-width: 300px;
+        transform: translate(-150%);
+        display: flex;
+        flex-direction: column;
+        margin-left: -40px;
+        padding-left: 40px;
+        transition: transform 0.5s ease-in-out;
+        box-shadow:  5px 0px 10px 0px #aaa;
+        overflow: scroll;
+    }
+
+    .navbar .menu-items li{
+        margin-bottom: 1.8rem;
+        font-size: 1.1rem;
+        font-weight: 500;
+    }
+
+    .logo{
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        font-size: 2.5rem;
+    }
+
+    .navbar-container input[type="checkbox"]:checked ~ .menu-items{
+        transform: translateX(0);
+    }
+
+    .navbar-container input[type="checkbox"]:checked ~ .hamburger-lines .line1{
+        transform: rotate(45deg);
+    }
+
+    .navbar-container input[type="checkbox"]:checked ~ .hamburger-lines .line2{
+        transform: scaleY(0);
+    }
+
+    .navbar-container input[type="checkbox"]:checked ~ .hamburger-lines .line3{
+        transform: rotate(-45deg);
+    }
+
+}
+
+@media (max-width: 500px){
+    .navbar-container input[type="checkbox"]:checked ~ .logo{
+        display: none;
+    }
+}
+
+
+#Rohit{
+    background-color: rgb(231, 243, 250);
+    display:flex;
+    flex-direction:column;
+    text-align: center;
+    /* margin-right:5%; */
+    max-width:50%;
+    flex-basis:auto;
+    /* flex-basis:50% */
+    /* margin-left:5%;
+    margin-right:5%; */
+}
+
+
+#roh{
+    max-width:27%;
+    margin-left:35%
+    /* flex-basis:auto; */
+}
+
+/* .logo{
+    justify-content: center;
+} */
+
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="navbar-container container">
+            <input type="checkbox" name="" id="">
+            <div class="hamburger-lines">
+                <span class="line line1"></span>
+                <span class="line line2"></span>
+                <span class="line line3"></span>
+            </div>
+            <ul class="menu-items">
+                <li><a href="home.html"><b>Home</b></a></li>
+                <li><a href="species.html"><b>Species</b></a></li>
+                <li><a href="#"><b>Your Personal Friend</b></a></li>
+                <li><a href="#"><b>Contact</b></a></li>
+            </ul>
+            <h1 class="logo">Rohit-Himanshu Industries</h1>
+        </div>
+    </nav>
+    
+    
+    <div class="marine">
+    <header><h2>Marine Helper</h2></header>
+    
+
+    <div class="container" id="Rohit">
+        <label for="imageInput" class="upload-label" id="roh">Select an Image</label>
+        <input type="file" id="imageInput" accept="image/*" onchange="displayImage(this)">
+        <img id="uploadedImage" src="" alt="Uploaded Image">
+        <button onclick="predict()">Predict</button>
+        <div id="predictionResult"></div>
+    </div>
+    </div>
+    <script>
+        function displayImage(input) {
+            const uploadedImage = document.getElementById('uploadedImage');
+            const file = input.files[0];
+            if (file) {
+                uploadedImage.src = URL.createObjectURL(file);
+                uploadedImage.style.display = 'block';
+            } else {
+                uploadedImage.src = '';
+                uploadedImage.style.display = 'none';
+            }
+        }
+
+        async function predict() {
+            const imageInput = document.getElementById('imageInput');
+            const predictionResult = document.getElementById('predictionResult');
+            
+            const file = imageInput.files[0];
+            if (!file) {
+                alert('Please select an image file.');
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('image', file);
+            
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    body: formData,
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Prediction failed.');
+                }
+                
+                const data = await response.json();
+                const predictedClass = data.predicted_class;
+                
+                predictionResult.innerHTML = `Predicted Class: ${predictedClass}`;
+            } catch (error) {
+                console.error(error);
+                predictionResult.innerHTML = 'Prediction failed.';
+            }
+        }
+    </script>
+</body>
+</html>
